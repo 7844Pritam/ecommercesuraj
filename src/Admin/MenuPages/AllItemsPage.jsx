@@ -14,7 +14,7 @@ const AllItemsPage = () => {
 
   const fetchItems = async () => {
     try {
-      const itemsCollection = collection(db, "items");
+      const itemsCollection = collection(db, "milkitems");
       const itemsSnapshot = await getDocs(itemsCollection);
       const itemsList = itemsSnapshot.docs.map((doc) => ({
         id: doc.id,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { auth, db, collection, query, where, getDocs } from "../firebase";
 
 const MyOrdersPage = () => {
@@ -10,7 +10,7 @@ const MyOrdersPage = () => {
       try {
         const user = auth.currentUser;
         if (user) {
-          const ordersRef = collection(db, "orders");
+          const ordersRef = collection(db, "milkorders");
           const q = query(ordersRef, where("userId", "==", user.uid));
           const querySnapshot = await getDocs(q);
 
@@ -36,28 +36,30 @@ const MyOrdersPage = () => {
   };
 
   return (
-    <div className="container px-4 py-8 mx-auto max-w-7xl">
-      <h2 className="mb-6 text-3xl font-bold text-gray-800">My Orders</h2>
+    <div className="container px-6 py-12 mx-auto max-w-7xl">
+      <h2 className="mb-8 text-4xl font-bold text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+        My Orders
+      </h2>
 
       {loading ? (
         <div className="flex items-center justify-center">
-          <div className="w-16 h-16 border-t-4 border-blue-500 rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-t-4 border-blue-600 rounded-full animate-spin"></div>
         </div>
       ) : orders.length > 0 ? (
         <div className="space-y-6">
           {orders.map((order) => (
             <div
               key={order.id}
-              className="p-6 transition duration-300 transform bg-white rounded-lg shadow-lg hover:scale-105 hover:shadow-xl"
+              className="p-6 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg shadow-lg border-2 border-gray-300"
             >
-              <h3 className="text-xl font-semibold text-gray-800">Order ID: {order.id}</h3>
-              <p className="mb-4 text-sm text-gray-500">Status: {order.status}</p>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">Order ID: {order.id}</h3>
+              <p className="text-gray-600 mb-4">Status: {order.status}</p>
 
               {order.trackingNumber && (
                 <div className="mt-4">
                   <button
                     onClick={() => handleTrackOrder(order.trackingNumber)}
-                    className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
                   >
                     Track Order
                   </button>
@@ -66,11 +68,13 @@ const MyOrdersPage = () => {
 
               <div className="mt-6">
                 <h4 className="text-lg font-semibold text-gray-800">Shipping Address</h4>
-                <p className="text-gray-600">{order.selectedAddress.name}</p>
-                <p className="text-gray-600">{order.selectedAddress.street}</p>
-                <p className="text-gray-600">
-                  {order.selectedAddress.city}, {order.selectedAddress.state} {order.selectedAddress.postalCode}
-                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li>{order.selectedAddress.name}</li>
+                  <li>{order.selectedAddress.street}</li>
+                  <li>
+                    {order.selectedAddress.city}, {order.selectedAddress.state} {order.selectedAddress.postalCode}
+                  </li>
+                </ul>
               </div>
 
               <div className="mt-6">

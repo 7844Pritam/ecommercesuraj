@@ -6,7 +6,7 @@ const AdminAllOrders = () => {
   const [activeTab, setActiveTab] = useState("live");
 
   useEffect(() => {
-    const ordersRef = collection(db, "orders");
+    const ordersRef = collection(db, "milkorders");
 
     const unsubscribe = onSnapshot(ordersRef, (querySnapshot) => {
       const fetchedOrders = querySnapshot.docs.map((doc) => ({
@@ -31,7 +31,7 @@ const AdminAllOrders = () => {
     if (!isConfirmed) return;
 
     try {
-      const orderRef = doc(db, "orders", orderId);
+      const orderRef = doc(db, "milkorders", orderId);
       await updateDoc(orderRef, { status: newStatus });
       console.log(`Order ${orderId} status updated to ${newStatus}`);
     } catch (error) {

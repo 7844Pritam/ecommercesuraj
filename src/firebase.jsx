@@ -3,13 +3,14 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs,query,where,onSnapshot, getDoc,addDoc,deleteDoc,doc,updateDoc, arrayUnion } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; 
 const firebaseConfig = {
-  apiKey: "AIzaSyBCsL0nEvyQxScMlw5FDsfs7UuTKopdOAo",
-  authDomain: "tokengenerator-85ccb.firebaseapp.com",
-  projectId: "tokengenerator-85ccb",
-  storageBucket: "tokengenerator-85ccb.appspot.com",
-  messagingSenderId: "545985494948",
-  appId: "1:545985494948:web:5717d36cb71d26292bcb31",
-  measurementId: "G-WV01Q7TD2W"
+  apiKey: "AIzaSyC2diMojLNiCgMj3GUcddUswDv30W5WLxE",
+  authDomain: "perdaycoaching.firebaseapp.com",
+  databaseURL: "https://perdaycoaching-default-rtdb.firebaseio.com",
+  projectId: "perdaycoaching",
+  storageBucket: "perdaycoaching.appspot.com",
+  messagingSenderId: "303500461503",
+  appId: "1:303500461503:web:6f302572d6ba2750880d0a",
+  measurementId: "G-7KYX2TL73M"
 };
 
 const app = initializeApp(firebaseConfig);

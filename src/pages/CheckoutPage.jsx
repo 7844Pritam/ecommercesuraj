@@ -19,7 +19,8 @@ const CheckoutPage = () => {
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [isAddingNewAddressForm, setIsAddingNewAddressForm] = useState(false); // State for toggling address form
   const [cart, setCart] = useState(location.state?.cart || []); 
-
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // State for success popup
+  
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -114,9 +115,13 @@ const CheckoutPage = () => {
     };
 
     try {
-      const ordersRef = collection(db, "orders");
+      const ordersRef = collection(db, "milkorders");
       await addDoc(ordersRef, orderData);
-      navigate("/");  // Navigate to homepage after order creation
+      setShowSuccessPopup(true); // Show success popup after order is created
+      setTimeout(() => {
+        setShowSuccessPopup(false); // Hide success popup after a few seconds
+        navigate("/");  // Navigate to homepage after order creation
+      }, 3000);
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -147,7 +152,16 @@ const CheckoutPage = () => {
       {!user ? (
         <div>Please log in to proceed to checkout</div>
       ) : (
-        <div>
+        <div> 
+          {showSuccessPopup && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
+              <div className="w-full max-w-md p-6 bg-green-500 rounded-md shadow-md text-white text-center">
+                <h3 className="text-2xl font-semibold mb-4">Success!</h3>
+                <p className="mb-4">Your order has been placed successfully.</p>
+                <p className="text-lg">Thank you for shopping with us!</p>
+              </div>
+            </div>
+          )}
           <div className="mb-5">
             <h4 className="mb-4 text-xl font-semibold">Your Selected Address</h4>
             {selectedAddress ? (

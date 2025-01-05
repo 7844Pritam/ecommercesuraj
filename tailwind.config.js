@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        maincolor: "#023047", // Add your custom color her
-        greenbutten: "#00FF00",
+        maincolor: "#ff5733", // Add your custom color her
+        greenbutten: "#1abc9c",
       },
     },
   },

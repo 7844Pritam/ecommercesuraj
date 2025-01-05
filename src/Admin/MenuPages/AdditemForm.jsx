@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db, storage } from "../../firebase";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -9,12 +9,13 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, serverTimestamp, updateDoc, doc } from "firebase/firestore";
 import CustomInput from "../../components/ReusableComponent/CustomInput";
+import PropTypes from 'prop-types';
 
 const AdditemForm = ({ closeForm, itemToEdit, fetchItems }) => {
   const [productDetails, setProductDetails] = useState({
     title: itemToEdit?.title || "",
     description: itemToEdit?.description || "",
-    shortDescription: itemToEdit?.shortDescription || "", // New short description field
+    shortDescription: itemToEdit?.shortDescription || "", 
     price: itemToEdit?.price || "",
   });
   const [images, setImages] = useState(itemToEdit?.images || []);
@@ -64,7 +65,7 @@ const AdditemForm = ({ closeForm, itemToEdit, fetchItems }) => {
           images: imageURLs.length > 0 ? imageURLs : itemToEdit.images, // Keep old images if none are uploaded
         };
 
-        const productRef = doc(db, "items", itemToEdit.id);
+        const productRef = doc(db, "milkitems", itemToEdit.id);
         await updateDoc(productRef, updatedProductData);
         alert("Product updated successfully!");
       } else {
@@ -84,7 +85,7 @@ const AdditemForm = ({ closeForm, itemToEdit, fetchItems }) => {
           timestamp: serverTimestamp(),
         };
 
-        await addDoc(collection(db, "items"), productData);
+        await addDoc(collection(db, "milkitems"), productData);
         alert("Product added successfully!");
       }
 
@@ -180,6 +181,18 @@ const AdditemForm = ({ closeForm, itemToEdit, fetchItems }) => {
       </form>
     </div>
   );
+};
+AdditemForm.propTypes = {
+  closeForm: PropTypes.func.isRequired,
+  itemToEdit: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    shortDescription: PropTypes.string,
+    price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    images: PropTypes.arrayOf(PropTypes.string),
+    id: PropTypes.string,
+  }),
+  fetchItems: PropTypes.func.isRequired,
 };
 
 export default AdditemForm;

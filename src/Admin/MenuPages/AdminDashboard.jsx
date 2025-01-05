@@ -16,22 +16,22 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const ordersSnapshot = await getDocs(collection(db, 'orders'));
+      const ordersSnapshot = await getDocs(collection(db, 'milkorders'));
       setOrdersCount(ordersSnapshot.size);
 
-      const liveOrdersSnapshot = await getDocs(query(collection(db, 'orders'), where('status', '==', 'Live')));
+      const liveOrdersSnapshot = await getDocs(query(collection(db, 'milkorders'), where('status', '==', 'Live')));
       setLiveOrdersCount(liveOrdersSnapshot.size);
 
-      const ongoingOrdersSnapshot = await getDocs(query(collection(db, 'orders'), where('status', '==', 'ongoing')));
+      const ongoingOrdersSnapshot = await getDocs(query(collection(db, 'milkorders'), where('status', '==', 'ongoing')));
       setOngoingOrdersCount(ongoingOrdersSnapshot.size);
 
-      const completedOrdersSnapshot = await getDocs(query(collection(db, 'orders'), where('status', '==', 'completed')));
+      const completedOrdersSnapshot = await getDocs(query(collection(db, 'milkorders'), where('status', '==', 'completed')));
       setCompletedOrdersCount(completedOrdersSnapshot.size);
 
-      const usersSnapshot = await getDocs(collection(db, 'users'));
+      const usersSnapshot = await getDocs(collection(db, 'milkusers'));
       setUsersCount(usersSnapshot.size);
 
-      const itemsSnapshot = await getDocs(collection(db, 'items'));
+      const itemsSnapshot = await getDocs(collection(db, 'milkitems'));
       setItemsCount(itemsSnapshot.size);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

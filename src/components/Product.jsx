@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,7 +14,7 @@ const Product = ({ cart, setCart }) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "items"));
+        const querySnapshot = await getDocs(collection(db, "milkitems"));
         const itemsList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -67,22 +67,24 @@ const Product = ({ cart, setCart }) => {
     <>
       <ToastContainer position="top-right" autoClose={1500} />
       <MainSlider />
-      <div className="container mx-auto py-8">
+      <div className="max-w-6xl mx-auto py-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Featured Products
         </h2>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
           {items.map((product) => (
             <div
               key={product.id}
               className="relative bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <Link to={`/product/${product.id}`} className="block relative">
-                <img
-                  src={product.images[0]}
-                  alt={product.title}
-                  className="object-cover w-full h-48 rounded-t-lg"
-                />
+                <div className="w-full h-60 overflow-hidden rounded-t-lg">
+                  <img
+                    src={product.images[0]}
+                    alt={product.title}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
               </Link>
               <div className="p-4">
                 <h5 className="text-lg font-semibold text-gray-800 truncate">

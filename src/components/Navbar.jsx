@@ -4,7 +4,8 @@ import { BsFillCartCheckFill } from "react-icons/bs";
 import LoginModal from "../pages/LoginPopUp";
 import SignUpPopUp from "../pages/SignUpPopUp";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase"; // Import Firestore db
+import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
 
 const Navbar = ({ setData, cart }) => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Navbar = ({ setData, cart }) => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setSignUpModalOpen] = useState(false);
   const [user, setUser] = useState(null); // Track the current user
+  const [userRole, setUserRole] = useState(""); // Track the user role
   const [isMenuOpen, setIsMenuOpen] = useState(false); // To control the hamburger menu
 
   // Track auth state change
@@ -19,13 +21,33 @@ const Navbar = ({ setData, cart }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser && currentUser.emailVerified) {
         setUser(currentUser); // User is authenticated and email verified
+        fetchUserRole(currentUser.uid); // Fetch the user role from Firestore
       } else {
         setUser(null); // User is not authenticated or not verified
+        setUserRole(""); // Reset role if not authenticated
       }
     });
 
     return () => unsubscribe(); // Cleanup listener on unmount
   }, []);
+
+  // Fetch user role from Firestore
+  const fetchUserRole = async (uid) => {
+    try {
+      const userDocRef = doc(db, "users", uid); // Assuming user data is in 'users' collection
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setUserRole(userData.role); // Set the role in state
+      } else {
+        console.log("User document does not exist.");
+        setUserRole(""); // If no user document exists
+      }
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+      setUserRole(""); // Set role to empty if error occurs
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +68,7 @@ const Navbar = ({ setData, cart }) => {
     try {
       await signOut(auth); // Sign out the user
       setUser(null); // Clear the user state
+      setUserRole(""); // Clear the user role
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -56,7 +79,7 @@ const Navbar = ({ setData, cart }) => {
       <header className="sticky top-0 z-50 shadow-md">
         <div className="relative flex items-center justify-between w-full p-4 bg-maincolor ">
           <Link to={"/"} className="text-2xl font-bold text-white">
-            Jyoti Electronics 
+            Milk & Cookies
           </Link>
 
           <button
@@ -113,12 +136,14 @@ const Navbar = ({ setData, cart }) => {
                   >
                     My Orders
                   </button>
-                  <button
-                    onClick={() => navigate("/admin")}
-                    className="px-4 py-2 transition duration-300 bg-white rounded-md text-maincolor hover:bg-blue-600"
-                  >
-                    Admin
-                  </button>
+                  {userRole === "admin" && (
+                    <button
+                      onClick={() => navigate("/admin")}
+                      className="px-4 py-2 transition duration-300 bg-white rounded-md text-maincolor hover:bg-blue-600"
+                    >
+                      Admin
+                    </button>
+                  )}
                 </>
               )}
 
@@ -178,12 +203,14 @@ const Navbar = ({ setData, cart }) => {
               >
                 My Orders
               </button>
-              <button
-                onClick={() => navigate("/admin")}
-                className="px-4 py-2 bg-white rounded-md text-maincolor hover:bg-blue-600"
-              >
-                Admin
-              </button>
+              {userRole === "admin" && (
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="px-4 py-2 mb-4 bg-white rounded-md text-maincolor hover:bg-blue-600"
+                >
+                  Admin
+                </button>
+              )}
 
               <Link to={"/cart"} className="relative ml-auto">
                 <button

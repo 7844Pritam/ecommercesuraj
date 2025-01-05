@@ -1,10 +1,9 @@
-import React from "react";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ec from "../assets/ec.png";
-import ec1 from "../assets/ec1.png";
+import ec from "../assets/img2.png";
+import ec1 from "../assets/img3.jpg";
 function MainSlider() {
   var settings = {
     dots: true,
@@ -15,7 +14,7 @@ function MainSlider() {
     arrows: false,
     autoplay: true,
     autoplaySpeed: 2000,
-  };
+  };  
   return (
     <Slider {...settings}>
       <div>

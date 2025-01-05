@@ -37,7 +37,8 @@ const SignModal = ({ closeModal, switchToSignUp }) => {
           await setDoc(userRef, {
             email: user.email,
             createdAt: serverTimestamp(), // Save creation time
-            uid: user.uid, // Store UID to track the user in Firestore
+            uid: user.uid,
+            role:"isUser" // Store UID to track the user in Firestore
           });
 
           setSuccessMessage("User added to Firestore!");
